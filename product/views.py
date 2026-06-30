@@ -1,18 +1,18 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Category, Product, Review
-from .serializers import CategoryListSerializer, CategoryDetailSerializer, ProductDetailSerializer, ProductListSerializer, ReviewDetailSerializer, ReviewListSerializer
+from .serializers import CategoryListSerializer, CategoryDetailSerializer, ProductDetailSerializer, ProductReviewSerializer,ProductListSerializer, ReviewDetailSerializer, ReviewListSerializer
 from rest_framework import status
+from django.db.models import Count, Avg
 
 # Create your views here.
 @api_view(http_method_names=['GET'])
 def category_list_api_view(request):
-    categories = Category.objects.all()
+    categories = Category.objects.annotate(products_count=Count('products'))
     data = CategoryListSerializer(categories, many=True).data
 
-    return  Response(
-        data=data
-    )
+    return Response(data=data)
+
 
 @api_view(http_method_names=['GET'])
 def category_detail_api_view(request, id):
@@ -61,4 +61,12 @@ def review_detail_api_view(request, id):
         return Response(data={'error': 'review not found!'},
                         status=status.HTTP_404_NOT_FOUND)
     data = ReviewDetailSerializer(review, many=False).data
+    return Response(data=data)
+
+
+@api_view(http_method_names=['GET'])
+def product_reviews_api_view(request):
+    products = Product.objects.annotate(avg_rating=Avg('reviews__stars')).prefetch_related('reviews').all()
+    data = ProductReviewSerializer(products, many=True).data
+
     return Response(data=data)
