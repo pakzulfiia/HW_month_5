@@ -111,7 +111,6 @@ def product_detail_api_view(request, id):
     elif request.method == 'PUT':
         serializer = ProductValidateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-    
         product.title = request.data.get('title')
         product.description = request.data.get('description')
         product.price = request.data.get('price')
