@@ -66,4 +66,3 @@ def authorization_api_view(request):
         return Response(data={'key': token.key})
     return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-
