@@ -221,3 +221,5 @@ PyCharmMiscProject.iml
 chromedriver
 logs
 db.sqlite3
+
+.env

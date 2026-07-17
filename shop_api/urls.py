@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from product import views
+from . import swagger
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,4 +32,5 @@ urlpatterns = [
     # path('api/v1/reviews/', views.review_list_api_view),
     # path('api/v1/reviews/<int:id>/', views.review_detail_api_view),
 ]
+urlpatterns += swagger.urlpatterns
 
